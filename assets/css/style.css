@@ -176,8 +176,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .frame { position: relative; margin: 0; }
 .frame--arch { border-radius: 999px 999px 26px 26px; padding: 8px; background: linear-gradient(170deg, var(--gold-l), var(--gold) 40%, rgba(201, 162, 39, .25)); box-shadow: 0 40px 80px -40px rgba(0, 0, 0, .8); }
 .frame--arch img { border-radius: 999px 999px 20px 20px; aspect-ratio: 848 / 1100; object-fit: cover; object-position: 50% 12%; width: 100%; }
-.badge { position: absolute; left: -14px; bottom: 34px; display: flex; align-items: center; gap: 12px; padding: 12px 16px 12px 12px; border-radius: 16px; background: var(--white); color: var(--navy); box-shadow: 0 18px 40px -18px rgba(0, 0, 0, .7); font-size: 13px; line-height: 1.25; font-weight: 600; }
-.badge b { font: 700 18px/1 var(--font-head); width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--navy); color: var(--gold-l); }
 
 .bubbles i { position: absolute; bottom: -20px; width: var(--s, 10px); height: var(--s, 10px); border-radius: 50%; border: 1.5px solid rgba(255, 251, 242, .45); background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .5), transparent 60%); animation: rise var(--d, 14s) linear infinite; animation-delay: var(--delay, 0s); left: var(--x, 50%); opacity: 0; }
 .bubbles i:nth-child(1) { --x: 8%;  --s: 10px; --d: 15s; }
