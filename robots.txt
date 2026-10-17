@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /_screens/
+Disallow: /tools/
+
+# [УТОЧНИТЬ: домен]
+Sitemap: https://example.ru/sitemap.xml
