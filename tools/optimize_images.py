@@ -16,7 +16,7 @@ WIDTHS = [480, 800, 1200, 1600]
 
 # key: (исходник, кроп (l, t, r, b) или None, зоны размытия [(l, t, r, b)])
 IMAGES = {
-    "hero-coach": (EDITED / "Generated Image October 17, 2026 - 3_13AM (1).jpg", None, []),
+    "hero-coach": (SITE / "assets" / "img" / "src" / "hero-coach-v2.jpg", None, []),
     "coach-team": (EDITED / "Generated Image October 17, 2026 - 3_19AM.jpg", None, []),
     # портреты на стене размыты, кадр обрезан выше обуви
     "coach-award": (
