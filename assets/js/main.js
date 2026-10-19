@@ -377,9 +377,73 @@
     dlg.addEventListener("close", function () { if (items[idx]) items[idx].focus(); });
   }
 
+  /* ---------- Видео-фон hero ---------- */
+  // Сначала грузится только poster. Видео подключается после полной загрузки страницы
+  // и только на десктопе, без prefers-reduced-motion и без экономии трафика.
+  function initHeroVideo() {
+    var video = $(".hero__video");
+    var btn = $(".hero__toggle");
+    if (!video) return;
+    var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    var saveData = !!(conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || "")));
+    var mobileMq = window.matchMedia("(max-width: 767px)");
+    if (reduceMotion || saveData) return;
+    if (mobileMq.matches) {
+      // Окно расширили до десктопа — подключаем видео тогда
+      var onChange = function (e) {
+        if (e.matches) return;
+        if (mobileMq.removeEventListener) mobileMq.removeEventListener("change", onChange); else mobileMq.removeListener(onChange);
+        initHeroVideo();
+      };
+      if (mobileMq.addEventListener) mobileMq.addEventListener("change", onChange); else mobileMq.addListener(onChange);
+      return;
+    }
+
+    var userPaused = false;
+    function sync() {
+      var paused = video.paused;
+      btn.setAttribute("aria-pressed", paused ? "true" : "false");
+      btn.setAttribute("aria-label", paused ? "Воспроизвести фоновое видео" : "Поставить фоновое видео на паузу");
+    }
+    function start() {
+      [["webm", "video/webm"], ["mp4", "video/mp4"]].forEach(function (t) {
+        var src = document.createElement("source");
+        src.src = video.getAttribute("data-" + t[0]);
+        src.type = t[1];
+        video.appendChild(src);
+      });
+      video.load();
+      var p = video.play();
+      if (p && p.catch) p.catch(function () { sync(); });
+      btn.hidden = false;
+    }
+    video.addEventListener("play", sync);
+    video.addEventListener("pause", sync);
+    video.addEventListener("error", function () { btn.hidden = true; }, true);
+    btn.addEventListener("click", function () {
+      if (video.paused) { userPaused = false; video.play(); } else { userPaused = true; video.pause(); }
+    });
+
+    // Не крутить видео, когда hero вне экрана
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!video.currentSrc) return;
+          if (en.isIntersecting) { if (!userPaused) video.play().catch(function () {}); }
+          else if (!video.paused) video.pause();
+        });
+      }).observe($(".hero"));
+    }
+
+    var later = window.requestIdleCallback || function (cb) { setTimeout(cb, 200); };
+    if (document.readyState === "complete") later(start);
+    else window.addEventListener("load", function () { later(start); }, { once: true });
+  }
+
   initChrome();
   initCounters();
   initLightbox();
+  initHeroVideo();
   loadData().then(render).catch(function (err) {
     console.warn("Не удалось загрузить данные тренера:", err);
   });
