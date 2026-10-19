@@ -217,20 +217,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .frame { position: relative; margin: 0; }
 
-.bubbles i { position: absolute; bottom: -20px; width: var(--s, 10px); height: var(--s, 10px); border-radius: 50%; border: 1.5px solid rgba(255, 251, 242, .45); background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .5), transparent 60%); animation: rise var(--d, 14s) linear infinite; animation-delay: var(--delay, 0s); left: var(--x, 50%); opacity: 0; }
-.bubbles i:nth-child(1) { --x: 8%;  --s: 10px; --d: 15s; }
-.bubbles i:nth-child(2) { --x: 22%; --s: 6px;  --d: 11s; --delay: 3s; }
-.bubbles i:nth-child(3) { --x: 46%; --s: 14px; --d: 18s; --delay: 6s; }
-.bubbles i:nth-child(4) { --x: 61%; --s: 8px;  --d: 13s; --delay: 1s; }
-.bubbles i:nth-child(5) { --x: 78%; --s: 12px; --d: 16s; --delay: 8s; }
-.bubbles i:nth-child(6) { --x: 90%; --s: 7px;  --d: 12s; --delay: 4s; }
-.bubbles i:nth-child(7) { --x: 35%; --s: 9px;  --d: 20s; --delay: 10s; }
-@keyframes rise {
-  0% { transform: translate3d(0, 0, 0); opacity: 0; }
-  10% { opacity: .9; }
-  50% { transform: translate3d(14px, -45vh, 0); }
-  100% { transform: translate3d(-8px, -95vh, 0); opacity: 0; }
-}
 
 
 /* ---------- Цифры ---------- */
@@ -474,7 +460,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
-  .bubbles, .progress__swimmer, .hero__toggle { display: none; }
+  .progress__swimmer, .hero__toggle { display: none; }
   .wave--animated { width: 100%; }
   .js .reveal { opacity: 1; transform: none; }
 }
