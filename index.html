@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Manrope:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
 <link rel="preload" as="image" href="assets/video/hero-poster.jpg" fetchpriority="high">
-<link rel="stylesheet" href="assets/css/style.css?v=6">
+<link rel="stylesheet" href="assets/css/style.css?v=8">
 
 <script type="application/ld+json">
 {
@@ -191,6 +191,8 @@ window.METRIKA_ID = XXXXXXXX;
   <!-- Источники (webm, mp4) подключает main.js после загрузки страницы и только на десктопе без reduced-motion и экономии трафика; иначе виден только poster -->
   <video class="hero__video" autoplay muted loop playsinline preload="metadata" poster="assets/video/hero-poster.jpg" data-webm="assets/video/hero.webm" data-mp4="assets/video/hero.mp4" tabindex="-1"></video>
  </div>
+ <div class="hero__blur hero__blur--soft" aria-hidden="true"></div>
+ <div class="hero__blur hero__blur--strong" aria-hidden="true"></div>
  <div class="hero__overlay" aria-hidden="true"></div>
  <div class="bubbles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
  <div class="container hero__grid">
@@ -456,6 +458,6 @@ window.METRIKA_ID = XXXXXXXX;
  <button type="button" class="lightbox__nav lightbox__next" aria-label="Следующее фото">›</button>
 </dialog>
 
-<script src="assets/js/main.js?v=6" defer></script>
+<script src="assets/js/main.js?v=8" defer></script>
 </body>
 </html>
