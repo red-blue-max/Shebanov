@@ -99,18 +99,10 @@
     }).join("");
     $("#principles").innerHTML = d.method.principles.map(esc).join('<i aria-hidden="true"></i>');
 
-    // Оборудование
-    var eq = d.equipment.map(function (e, i) {
-      return '<div><dt data-n="' + String(i + 1).padStart(2, "0") + '">' + esc(e.item) + "</dt><dd>" + esc(e.purpose) + "</dd></div>";
-    });
-    eq.push('<div class="spec__more"><dt data-n="+">И другой инвентарь</dt><dd>Подбираю под задачу конкретного ученика</dd></div>');
-    $("#equipment-list").innerHTML = eq.join("");
-
     // Программы
     $("#programs-list").innerHTML = d.programs.map(function (p, i) {
-      var link = p.id === "adaptive" ? ' <a href="#adaptive">Подробнее</a>' : "";
       return '<article class="program reveal' + (i === 0 ? " program--lead" : "") + '" id="program-' + esc(p.id) + '">' +
-        '<p class="program__n">0' + (i + 1) + "</p><h3>" + esc(p.title) + "</h3><p>" + esc(p.text) + link + "</p>" +
+        '<p class="program__n">0' + (i + 1) + "</p><h3>" + esc(p.title) + "</h3><p>" + esc(p.text) + "</p>" +
         '<p class="program__meta">' + esc(p.meta) + "</p></article>";
     }).join("");
 
@@ -119,7 +111,7 @@
     $("#schedule-body").innerHTML = d.schedule.rows.map(function (r) {
       return "<tr><td>" + esc(r.days) + "</td><td>" + esc(r.time) + "</td><td>" + esc(r.age) + "</td></tr>";
     }).join("");
-    $("#schedule-note").textContent = d.schedule.note;
+    $("#schedule-notes").innerHTML = (d.schedule.notes || []).map(function (n) { return "<p>" + esc(n) + "</p>"; }).join("");
     if (d.location.mapUrl) $("#map-link").href = d.location.mapUrl;
 
     // FAQ
@@ -180,56 +172,79 @@
     var box = $("#quiz .quiz__body");
     var prog = $("#quiz .quiz__progress");
     var qs = d.quiz.questions;
-    var answers = [];
+    var answers = {};
+    var labels = [];
     var byId = {};
     d.programs.forEach(function (p) { byId[p.id] = p; });
 
     function pick(a) {
-      var age = a[0], swim = a[1], goal = a[2];
-      if (goal === "adaptive") return { id: "adaptive", why: "Подберём возраст, формат и темп под возможности ребёнка. Перед началом обсудим цели и особенности." };
-      if (age === "small") return { id: "individual", why: "Текущие группы — от 6 лет, поэтому для младших начинаем с индивидуальных занятий." };
-      if (goal === "compete" && swim === "yes") return { id: "competition", why: "Ребёнок уже уверенно плавает — можно работать на старты, повороты и разряды." };
-      if (swim === "no") return { id: "individual", why: "С нуля быстрее и спокойнее начать индивидуально: привыкнуть к воде и освоить базу." };
-      if (goal === "compete") return { id: "groups", why: "Сначала укрепим технику и выносливость в группе, затем — подготовка к соревнованиям." };
+      var basic = a.level === "no" || a.level === "some";
+      if (a.goal === "openwater") return { id: "openwater", why: basic
+        ? "Сначала уверенно освоим технику и дыхание в бассейне, затем — специальная подготовка к открытой воде."
+        : "Работаем над ритмом, навигацией, стартом в группе и выносливостью на длинной дистанции." };
+      if (a.goal === "compete") return basic
+        ? { id: "individual", why: "Для стартов нужна крепкая база: начнём с техники персонально, затем перейдём к соревновательной подготовке." }
+        : { id: "competition", why: "Уже есть база — можно работать на старты, повороты, темп и разряды." };
+      if (a.who === "small") return { id: "individual", why: "Группы — от 6 лет, поэтому малышей начинаем персонально: спокойно, с игр и знакомства с водой." };
+      if (a.who === "adult") return { id: "individual", why: "Для взрослых — персональные тренировки под вашу цель и график." };
+      if (a.format === "individual") return { id: "individual", why: "Персонально — быстрее всего: всё внимание тренера на технике и слабых местах." };
+      if (a.level === "no" && a.format !== "group") return { id: "individual", why: "С нуля спокойнее и быстрее начать персонально, а потом перейти в группу." };
       return { id: "groups", why: "Группа даёт регулярность, технику и командный дух." };
     }
 
-    function groupsFor(age) {
-      var rows = d.schedule.rows.filter(function (r) {
+    function tips(a, id) {
+      var t = [];
+      if (a.start === "soon") t.push("До старта немного времени — лучше заниматься 2–3 раза в неделю, план выстроим под дату соревнований.");
+      if (id === "groups" && a.freq === "3") t.push("Группы занимаются 2 раза в неделю; третью тренировку можно добавить персонально.");
+      if (id === "groups" && a.freq === "1") t.push("Группы занимаются 2 раза в неделю — так прогресс заметнее.");
+      if (id !== "groups" && a.format === "group" && (a.who === "kid" || a.who === "teen")) t.push("Позже можно перейти в группу по возрасту.");
+      return t;
+    }
+
+    function groupsFor(who) {
+      return d.schedule.rows.filter(function (r) {
         var m = r.age.match(/(\d+)\D+(\d+)/);
         if (!m) return true;
-        var lo = +m[1], hi = +m[2];
-        return age === "teen" ? hi >= 15 : lo <= 8;
-      });
-      return rows.map(function (r) { return r.days + " " + r.time + " (" + r.age + ")"; }).join("; ");
+        return who === "teen" ? +m[2] >= 15 : +m[1] <= 8;
+      }).map(function (r) { return r.days + " " + r.time + " (" + r.age + ")"; }).join("; ");
     }
 
     function step() {
-      var i = answers.length;
+      var i = labels.length;
       if (i < qs.length) {
         prog.textContent = "Вопрос " + (i + 1) + " из " + qs.length;
         box.innerHTML = '<p class="quiz__q">' + esc(qs[i].q) + '</p><div class="quiz__opts">' +
-          qs[i].options.map(function (o) { return '<button type="button" class="quiz__opt" data-v="' + esc(o.value) + '">' + esc(o.label) + "</button>"; }).join("") + "</div>";
+          qs[i].options.map(function (o, k) { return '<button type="button" class="quiz__opt" data-k="' + k + '">' + esc(o.label) + "</button>"; }).join("") + "</div>";
         return;
       }
       var r = pick(answers);
       var p = byId[r.id];
-      var times = (r.id === "groups" || r.id === "competition") ? groupsFor(answers[0]) : "";
-      var L = contactLinks(d.contacts, "\nИнтересует: " + p.title);
+      var times = r.id === "groups" ? groupsFor(answers.who) : "";
+      var extra = tips(answers, r.id);
+      var summary = "\nПодбор программы: " + p.title + "\n" + labels.join("\n");
+      var L = contactLinks(d.contacts, summary);
       prog.textContent = "Готово";
       box.innerHTML = '<div class="quiz__result"><p class="quiz__q" style="margin-bottom:6px">Вам подойдёт:</p><h4>' + esc(p.title) + "</h4><p>" + esc(r.why) + "</p>" +
+        extra.map(function (x) { return "<p>" + esc(x) + "</p>"; }).join("") +
         (times ? "<p>Подходящие группы: " + esc(times) + ".</p>" : "") +
         '<div class="quiz__actions">' +
         (L.primary
-          ? '<a class="btn btn--gold" href="' + esc(L.primary) + '" target="_blank" rel="noopener" data-goal="cta_signup">Записаться</a>'
+          ? '<a class="btn btn--gold" href="' + esc(L.primary) + '" target="_blank" rel="noopener" data-goal="cta_signup">Записаться с этими ответами</a>'
           : '<a class="btn btn--gold" href="#contacts" data-goal="cta_signup">Записаться</a>') +
         '<button type="button" class="quiz__restart">Пройти заново</button></div></div>';
     }
 
     box.addEventListener("click", function (e) {
       var opt = e.target.closest(".quiz__opt");
-      if (opt) { answers.push(opt.getAttribute("data-v")); step(); var f = box.querySelector("button, a"); if (f) f.focus({ preventScroll: true }); return; }
-      if (e.target.closest(".quiz__restart")) { answers = []; step(); }
+      if (opt) {
+        var q = qs[labels.length], o = q.options[+opt.getAttribute("data-k")];
+        answers[q.id] = o.value;
+        labels.push(q.q + " " + o.label);
+        step();
+        var f = box.querySelector("button, a"); if (f) f.focus({ preventScroll: true });
+        return;
+      }
+      if (e.target.closest(".quiz__restart")) { answers = {}; labels = []; step(); }
     });
     step();
   }

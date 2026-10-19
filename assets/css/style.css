@@ -268,7 +268,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 
 /* ---------- Методика: шаги-дорожки ---------- */
-.method { background: var(--cream); }
+.method { background: var(--cream); padding-bottom: clamp(16px, 3vw, 32px); }
 .method h2 { color: var(--navy); max-width: 20ch; }
 .lane-steps { counter-reset: step; margin-top: 48px; display: grid; gap: 0; border-radius: var(--radius); overflow: hidden; background: var(--white); box-shadow: 0 0 0 1px var(--line); }
 .lane-steps li { counter-increment: step; position: relative; padding: 26px 24px 26px 92px; border-bottom: 1px solid var(--line); background-image: linear-gradient(90deg, transparent 72px, transparent); }
@@ -289,34 +289,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 .principles { margin: 48px 0 20px; font: 700 clamp(20px, 3.4vw, 40px)/1.25 var(--font-head); color: var(--royal); display: flex; flex-wrap: wrap; gap: 6px 22px; align-items: center; }
 .principles i { width: 10px; height: 10px; background: var(--gold); transform: rotate(45deg); display: inline-block; }
-.disclaimer { font-size: 13.5px; color: var(--ink-soft); max-width: 80ch; border-left: 2px solid var(--gold); padding-left: 14px; margin: 0; }
-.disclaimer--light { color: rgba(255, 251, 242, .82); }
-
-/* ---------- Оборудование: спецификация ---------- */
-.equipment { background: var(--white); }
-.equipment h2 { color: var(--navy); font-size: clamp(24px, 3.6vw, 44px); }
-.equipment__grid { display: grid; gap: 40px; }
-.equipment__note { font: italic 500 22px/1.35 var(--font-quote); color: var(--royal); margin-top: 28px; max-width: 30ch; }
-.spec { margin: 0; border-top: 2px solid var(--navy); }
-.spec div { display: grid; grid-template-columns: 1fr; gap: 2px; padding: 16px 0; border-bottom: 1px solid var(--line); }
-.spec dt { font-weight: 700; color: var(--navy); display: flex; align-items: baseline; gap: 12px; }
-.spec dt::before { content: attr(data-n); font: 700 12px/1 var(--font-head); color: var(--gold); min-width: 24px; }
-.spec dd { margin: 0 0 0 36px; color: var(--ink-soft); font-size: 15.5px; }
-.spec .spec__more dt { font-weight: 600; color: var(--royal); }
-@media (min-width: 1200px) {
-  .equipment__grid { grid-template-columns: .85fr 1.15fr; gap: 72px; align-items: start; }
-  .spec div { grid-template-columns: minmax(220px, 1fr) 1.1fr; column-gap: 28px; align-items: baseline; }
-  .spec dd { margin-left: 0; }
-}
-
-/* ---------- Адаптивное плавание ---------- */
-.adaptive { padding-bottom: calc(var(--section) + 30px); background: linear-gradient(150deg, var(--violet) 0%, #3a2378 50%, var(--royal) 130%); color: var(--white); overflow: hidden; isolation: isolate; }
-.adaptive h2 { color: var(--white); }
-.adaptive__grid { display: grid; gap: 28px; }
-.adaptive__text p { color: rgba(255, 251, 242, .9); }
-.pills { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 28px; }
-.pills li { padding: 10px 18px; border-radius: 999px; border: 1.5px solid var(--gold-l); color: var(--gold-l); font-weight: 600; font-size: 15px; }
-@media (min-width: 1200px) { .adaptive__grid { grid-template-columns: .9fr 1.1fr; gap: 72px; } }
 
 /* ---------- Программы ---------- */
 .programs { background: var(--cream); }
@@ -334,12 +306,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .program--lead .program__meta { color: var(--gold-l); border-color: rgba(255, 251, 242, .25); }
 .program--lead .program__n { color: var(--gold-l); }
 @media (min-width: 700px) { .programs__grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1040px) {
-  .programs__grid { grid-template-columns: repeat(6, 1fr); }
-  .program { grid-column: span 2; }
-  .program--lead { grid-column: span 3; grid-row: span 1; }
-  .program:nth-child(2) { grid-column: span 3; }
-}
 
 /* Квиз */
 .quiz { margin-top: 48px; border-radius: 24px; padding: clamp(24px, 4vw, 44px); overflow: hidden; }
@@ -356,16 +322,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .quiz__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
 .quiz__restart { background: none; border: 0; color: var(--white); text-decoration: underline; text-underline-offset: 4px; padding: 14px 6px; }
 
-/* ---------- Как начать ---------- */
-.start { background: var(--cream); padding-top: 0; }
-.start h2 { color: var(--navy); }
-.start__steps { counter-reset: s; display: grid; gap: 16px; margin-top: 32px; }
-.start__steps li { counter-increment: s; display: grid; gap: 6px; padding: 24px; border-radius: var(--radius); border: 1.5px solid var(--navy); position: relative; }
-.start__steps li::before { content: "0" counter(s); font: 700 40px/1 var(--font-head); color: var(--gold); margin-bottom: 10px; }
-.start__steps b { font: 700 19px/1.2 var(--font-head); color: var(--navy); }
-.start__steps span { color: var(--ink-soft); }
-@media (min-width: 860px) { .start__steps { grid-template-columns: repeat(3, 1fr); } }
-
 /* ---------- Расписание ---------- */
 .schedule { padding-top: calc(var(--section) + 20px); padding-bottom: calc(var(--section) + 30px); overflow: hidden; }
 .schedule__grid { display: grid; gap: 36px; }
@@ -378,7 +334,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .table td:nth-child(2) { font: 700 22px/1 var(--font-head); color: var(--gold-l); }
 .table tbody tr { transition: background .2s; }
 .table tbody tr:hover { background: rgba(255, 251, 242, .05); }
-.schedule__note { margin-top: 18px; font-size: 15px; color: rgba(255, 251, 242, .8); }
+.schedule__notes { margin-top: 18px; } .schedule__notes p { margin: 0 0 8px; font-size: 15px; color: rgba(255, 251, 242, .8); }
 @media (min-width: 960px) { .schedule__grid { grid-template-columns: .9fr 1.1fr; gap: 72px; align-items: start; } }
 
 /* ---------- Галерея ---------- */
