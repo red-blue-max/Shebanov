@@ -378,26 +378,18 @@
   }
 
   /* ---------- Видео-фон hero ---------- */
-  // Сначала грузится только poster. Видео подключается после полной загрузки страницы
-  // и только на десктопе, без prefers-reduced-motion и без экономии трафика.
+  // Сначала грузится только poster. Видео подключается после полной загрузки страницы,
+  // кроме prefers-reduced-motion и экономии трафика. На телефоне — отдельная вертикальная версия.
   function initHeroVideo() {
     var video = $(".hero__video");
     var btn = $(".hero__toggle");
     if (!video) return;
     var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     var saveData = !!(conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || "")));
-    var mobileMq = window.matchMedia("(max-width: 767px)");
+    var phone = window.matchMedia("(max-width: 767px)").matches;
+    var suffix = phone ? "-mobile" : "";
+    if (phone && video.getAttribute("data-poster-mobile")) video.poster = video.getAttribute("data-poster-mobile");
     if (reduceMotion || saveData) return;
-    if (mobileMq.matches) {
-      // Окно расширили до десктопа — подключаем видео тогда
-      var onChange = function (e) {
-        if (e.matches) return;
-        if (mobileMq.removeEventListener) mobileMq.removeEventListener("change", onChange); else mobileMq.removeListener(onChange);
-        initHeroVideo();
-      };
-      if (mobileMq.addEventListener) mobileMq.addEventListener("change", onChange); else mobileMq.addListener(onChange);
-      return;
-    }
 
     var userPaused = false;
     function sync() {
@@ -406,9 +398,11 @@
       btn.setAttribute("aria-label", paused ? "Воспроизвести фоновое видео" : "Поставить фоновое видео на паузу");
     }
     function start() {
-      [["webm", "video/webm"], ["mp4", "video/mp4"]].forEach(function (t) {
+      [["mp4", "video/mp4"]].forEach(function (t) {
+        var url = video.getAttribute("data-" + t[0] + suffix);
+        if (!url) return;
         var src = document.createElement("source");
-        src.src = video.getAttribute("data-" + t[0]);
+        src.src = url;
         src.type = t[1];
         video.appendChild(src);
       });

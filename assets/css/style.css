@@ -180,13 +180,23 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
     linear-gradient(180deg, rgba(10, 26, 63, .3) 0%, transparent 16%, transparent 82%, rgba(10, 26, 63, .4) 100%),
     linear-gradient(90deg, rgba(10, 26, 63, .76) 0%, rgba(12, 28, 72, .74) 35%, rgba(22, 36, 102, .7) 52%, rgba(40, 38, 120, .35) 62%, rgba(40, 38, 120, 0) 74%); }
 @media (min-width: 1100px) { .hero__text { max-width: 560px; } }
-/* Узкие экраны: текст на всю ширину, поэтому размытие и затемнение по всему кадру */
+/* Узкие экраны (телефон, планшет): видео чистое сверху, текст ниже — на размытии и затемнении.
+   Границы считаются от высоты окна: шапка + 26vh чистого видео. */
 @media (max-width: 1099px) {
-  .hero__blur--soft { -webkit-mask-image: none; mask-image: none; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-  .hero__blur--strong { display: none; }
-  .hero__overlay { background:
-    linear-gradient(180deg, rgba(10, 26, 63, .35) 0%, transparent 22%, transparent 70%, rgba(10, 26, 63, .55) 100%),
-    linear-gradient(100deg, rgba(10, 26, 63, .72) 0%, rgba(22, 36, 102, .7) 60%, rgba(75, 42, 138, .7) 100%); }
+  .hero { --clear: calc(var(--header-h) + 26vh); justify-content: flex-start; padding-top: calc(var(--clear) + 4vh); }
+  .hero__media { background-position: 50% 30%; }
+  .hero__video { object-position: 50% 30%; }
+  .hero__blur--soft { -webkit-mask-image: linear-gradient(180deg, transparent 0, transparent calc(var(--clear) - 14vh), #000 var(--clear)); mask-image: linear-gradient(180deg, transparent 0, transparent calc(var(--clear) - 14vh), #000 var(--clear)); }
+  .hero__blur--strong { -webkit-mask-image: linear-gradient(180deg, transparent 0, transparent calc(var(--clear) - 6vh), #000 calc(var(--clear) + 8vh)); mask-image: linear-gradient(180deg, transparent 0, transparent calc(var(--clear) - 6vh), #000 calc(var(--clear) + 8vh)); }
+  .hero__overlay { background: linear-gradient(180deg,
+      rgba(10, 26, 63, .45) 0, rgba(10, 26, 63, 0) calc(var(--header-h) + 4vh),
+      rgba(10, 26, 63, 0) calc(var(--clear) - 12vh),
+      rgba(12, 28, 72, .5) calc(var(--clear) - 4vh),
+      rgba(10, 26, 63, .74) calc(var(--clear) + 3vh),
+      rgba(10, 26, 63, .76) 100%); }
+}
+@media (max-width: 767px) {
+  .hero__media { background-image: url("../video/hero-poster-mobile.jpg"); }
 }
 .hero .eyebrow { background: rgba(10, 26, 63, .55); }
 .hero__toggle { position: absolute; right: max(16px, calc((100vw - 1200px) / 2 + 16px)); bottom: clamp(70px, 9vw, 110px); z-index: 2; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; padding: 0; color: var(--white); background: rgba(10, 26, 63, .55); border: 1px solid rgba(255, 251, 242, .35); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: background .2s, border-color .2s; }
