@@ -78,20 +78,13 @@
       return '<li><span class="period">' + period + "</span><b>" + esc(t.place) + '</b><span class="role">' + esc(t.role) + "</span></li>";
     }).join("");
 
-    var prof = d.officialProfile;
-    var profHtml = prof.url
-      ? '<a href="' + esc(prof.url) + '" target="_blank" rel="noopener">' + esc(prof.label) + " ↗</a>"
-      : esc(prof.label) + " " + todo("УТОЧНИТЬ: ссылка на профиль");
-    $("#official-profile").innerHTML = profHtml;
-    $("#footer-profile").innerHTML = profHtml;
-
     // Достижения учеников
     $("#achievements").innerHTML = d.achievements.map(function (a) {
       var more = a.anchor ? ' <a href="' + esc(a.anchor) + '">Подробнее</a>' : "";
       var t = a.todo ? "<br>" + todo("ПОДТВЕРДИТЬ: " + a.todo) : "";
       return '<li class="reveal"><h3>' + esc(a.title) + '</h3><p class="board__desc">' + esc(a.text) + more + t + "</p></li>";
     }).join("");
-    if (d.competitionsCaption) $(".strip__caption").textContent = d.competitionsCaption;
+    if (d.competitionsCaption) { $(".strip__caption").textContent = d.competitionsCaption; $(".strip__caption").hidden = false; }
 
     // Методика
     $("#method-steps").innerHTML = d.method.steps.map(function (s) {
