@@ -186,23 +186,30 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
     linear-gradient(180deg, rgba(10, 26, 63, .3) 0%, transparent 16%, transparent 82%, rgba(10, 26, 63, .4) 100%),
     linear-gradient(90deg, rgba(10, 26, 63, .76) 0%, rgba(12, 28, 72, .74) 35%, rgba(22, 36, 102, .7) 52%, rgba(40, 38, 120, .35) 62%, rgba(40, 38, 120, 0) 74%); }
 }
-/* Узкие экраны (телефон, планшет): видео чистое сверху, текст ниже — на размытии и затемнении.
-   Границы считаются от высоты окна: шапка + 26vh чистого видео. */
-@media (max-width: 1099px) {
-  .hero { --clear: calc(var(--header-h) + 26vh); justify-content: flex-start; padding-top: calc(var(--clear) + 4vh); }
-  .hero__media { background-position: 50% 30%; }
-  .hero__video { object-position: 50% 30%; }
-  .hero__blur--soft { -webkit-mask-image: linear-gradient(180deg, transparent 0, transparent calc(var(--clear) - 14vh), #000 var(--clear)); mask-image: linear-gradient(180deg, transparent 0, transparent calc(var(--clear) - 14vh), #000 var(--clear)); }
-  .hero__blur--strong { -webkit-mask-image: linear-gradient(180deg, transparent 0, transparent calc(var(--clear) - 6vh), #000 calc(var(--clear) + 8vh)); mask-image: linear-gradient(180deg, transparent 0, transparent calc(var(--clear) - 6vh), #000 calc(var(--clear) + 8vh)); }
-  .hero__overlay { background: linear-gradient(180deg,
-      rgba(10, 26, 63, .45) 0, rgba(10, 26, 63, 0) calc(var(--header-h) + 4vh),
-      rgba(10, 26, 63, 0) calc(var(--clear) - 12vh),
-      rgba(12, 28, 72, .5) calc(var(--clear) - 4vh),
-      rgba(10, 26, 63, .74) calc(var(--clear) + 3vh),
-      rgba(10, 26, 63, .76) 100%); }
+/* Телефон и планшет вертикально: видео — прямоугольник 16:9 сверху, текст ниже на тёмном фоне */
+@media (max-width: 1099px) and (orientation: portrait) {
+  .hero { display: block; min-height: 0; padding-top: calc(var(--header-h) + 12px); }
+  .hero__media { position: relative; inset: auto; z-index: 0; aspect-ratio: 16 / 9; width: auto; max-width: 720px;
+    margin: 0 max(var(--gutter), calc((100% - 720px) / 2)) clamp(24px, 6vw, 40px);
+    border-radius: 20px; overflow: hidden; background-image: url("../video/hero-poster-720.jpg"); background-position: 50% 50%;
+    box-shadow: 0 24px 50px -24px rgba(0, 0, 0, .8), 0 0 0 1px rgba(255, 251, 242, .14); }
+  .hero__video { object-position: 50% 50%; }
+  .hero__blur, .hero__overlay { display: none; }
+  .hero__text { text-shadow: none; }
+  .hero__toggle { right: calc(max(var(--gutter), (100% - 720px) / 2) + 12px); bottom: auto;
+    top: calc(var(--header-h) + 12px + min(100vw - 2 * var(--gutter), 720px) * 9 / 16 - 52px); }
 }
-@media (max-width: 767px) {
-  .hero__media { background-image: url("../video/hero-poster-mobile.jpg"); }
+/* Телефон и планшет горизонтально: видео на весь экран, текст слева на затемнении */
+@media (max-width: 1099px) and (orientation: landscape) {
+  /* видео — высотой в экран, ниже текст продолжается на тёмном фоне */
+  .hero__media, .hero__blur, .hero__overlay { bottom: auto; height: 100svh; }
+  .hero__media { background-image: url("../video/hero-poster-720.jpg"); }
+  .hero__text { max-width: 58%; }
+  .hero__blur--soft { -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 60%, transparent 82%); mask-image: linear-gradient(90deg, #000 0%, #000 60%, transparent 82%); }
+  .hero__blur--strong { -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 50%, transparent 72%); mask-image: linear-gradient(90deg, #000 0%, #000 50%, transparent 72%); }
+  .hero__overlay { background:
+    linear-gradient(180deg, rgba(10, 26, 63, .35) 0%, transparent 18%, transparent 62%, rgba(12, 28, 72, .9) 100%),
+    linear-gradient(90deg, rgba(10, 26, 63, .78) 0%, rgba(12, 28, 72, .76) 45%, rgba(22, 36, 102, .72) 62%, rgba(40, 38, 120, .35) 74%, rgba(40, 38, 120, 0) 86%); }
 }
 .hero .eyebrow { background: rgba(10, 26, 63, .55); }
 .hero__toggle { position: absolute; right: max(16px, calc((100vw - 1200px) / 2 + 16px)); bottom: clamp(70px, 9vw, 110px); z-index: 2; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; padding: 0; color: var(--white); background: rgba(10, 26, 63, .55); border: 1px solid rgba(255, 251, 242, .35); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: background .2s, border-color .2s; }

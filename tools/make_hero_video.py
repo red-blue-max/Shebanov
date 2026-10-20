@@ -2,10 +2,11 @@
 
 Запуск из папки site/:  python tools/make_hero_video.py
 Нужен ffmpeg с zscale/tonemap (берётся из пакета imageio-ffmpeg).
-Результат: assets/video/hero-1080.mp4, hero-mobile.mp4, hero-poster.jpg, hero-poster-mobile.jpg.
+Результат: assets/video/hero-1080.mp4, hero-720.mp4, hero-poster.jpg, hero-poster-720.jpg.
 Промежуточные файлы — в ../video_hero/build/ (оригиналы не трогаются).
 """
 import subprocess
+import sys
 from pathlib import Path
 
 import imageio_ffmpeg
@@ -21,8 +22,8 @@ TONEMAP = ("zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,"
            "tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,format=yuv420p")
 
 # Планы: файл, начало, конец (сек исходника), скорость (<1 — замедление), HDR,
-# кадр (crop "w:h:x:y" в исходных пикселях после автоповорота или None), зеркало,
-# центр вертикального кадра для телефона (доля ширины 1920).
+# кадр (crop "w:h:x:y" в исходных пикселях после автоповорота или None), зеркало.
+# m — устаревший параметр (центр вертикального кадра), не используется.
 SHOTS = [
     # старт: присед на тумбе и прыжок (замедление), пловец сдвинут вправо
     dict(f="IMG_0222.MOV", ss=3.0, to=4.2, speed=1.0, hdr=True, crop="2400:1350:0:405", m=0.70),
@@ -64,30 +65,33 @@ def shot_filter(s):
 def main():
     BUILD.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(parents=True, exist_ok=True)
-    desk, mob = [], []
+    desk = []
+    # --concat-only: планы не перекодируются, берутся готовые из build/
+    only_concat = "--concat-only" in sys.argv
     for i, s in enumerate(SHOTS):
         src = str(SRC / s["f"])
         d = BUILD / f"shot{i}.mp4"
+        if only_concat and d.exists():
+            desk.append(d)
+            continue
         run(["-ss", str(s["ss"]), "-to", str(s["to"]), "-i", src, "-an",
              "-vf", shot_filter(s), *X264, "-preset", "slow", "-crf", "12", str(d)])
-        x = int(min(max(s["m"] * 1920 - 304, 0), 1920 - 608))
-        mb = BUILD / f"shot{i}_m.mp4"
-        run(["-i", str(d), "-vf", f"crop=608:1080:{x}:0", *X264, "-preset", "slow", "-crf", "12", str(mb)])
         desk.append(d)
-        mob.append(mb)
         print("shot", i, "ok")
 
-    for files, name, crf, maxrate in ((desk, "hero-1080.mp4", "20", "7.5M"), (mob, "hero-mobile.mp4", "23", "2.6M")):
-        lst = BUILD / (name + ".txt")
-        lst.write_text("".join(f"file '{p.as_posix()}'\n" for p in files), encoding="utf-8")
-        run(["-f", "concat", "-safe", "0", "-i", str(lst), "-an", *X264, "-preset", "slow",
+    lst = BUILD / "list.txt"
+    lst.write_text("".join(f"file '{p.as_posix()}'\n" for p in desk), encoding="utf-8")
+    # компьютер 1920×1080 и телефон/планшет 1280×720 (горизонтальная, работает в обеих ориентациях)
+    for name, scale, crf, maxrate in (("hero-1080.mp4", None, "20", "7.5M"), ("hero-720.mp4", "1280:720", "25", "2.3M")):
+        vf = ["-vf", f"scale={scale}:flags=lanczos"] if scale else []
+        run(["-f", "concat", "-safe", "0", "-i", str(lst), "-an", *vf, *X264, "-preset", "slow",
              "-crf", crf, "-maxrate", maxrate, "-bufsize", "15M", "-profile:v", "high",
              "-movflags", "+faststart", str(OUT / name)])
         print(name, (OUT / name).stat().st_size // 1024, "KB")
 
     # Постеры — первый кадр
     run(["-i", str(OUT / "hero-1080.mp4"), "-frames:v", "1", "-q:v", "3", str(OUT / "hero-poster.jpg")])
-    run(["-i", str(OUT / "hero-mobile.mp4"), "-frames:v", "1", "-q:v", "3", str(OUT / "hero-poster-mobile.jpg")])
+    run(["-i", str(OUT / "hero-720.mp4"), "-frames:v", "1", "-q:v", "4", str(OUT / "hero-poster-720.jpg")])
 
 
 if __name__ == "__main__":

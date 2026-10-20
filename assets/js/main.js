@@ -379,14 +379,15 @@
 
   /* ---------- Видео-фон hero ---------- */
   // Сначала грузится только poster. Видео подключается после полной загрузки страницы,
-  // кроме prefers-reduced-motion и экономии трафика. На телефоне — отдельная вертикальная версия.
+  // кроме prefers-reduced-motion и экономии трафика. На телефоне и планшете — версия 720p.
   function initHeroVideo() {
     var video = $(".hero__video");
     var btn = $(".hero__toggle");
     if (!video) return;
     var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     var saveData = !!(conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || "")));
-    var phone = window.matchMedia("(max-width: 767px)").matches;
+    // Телефон и планшет (короткая сторона экрана < 1100 px) — лёгкая 720p-версия, подходит для обеих ориентаций
+    var phone = window.matchMedia("(max-width: 1099px)").matches || Math.min(screen.width, screen.height) < 768;
     var suffix = phone ? "-mobile" : "";
     if (phone && video.getAttribute("data-poster-mobile")) video.poster = video.getAttribute("data-poster-mobile");
     if (reduceMotion || saveData) return;

@@ -28,9 +28,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Manrope:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
-<link rel="preload" as="image" href="assets/video/hero-poster.jpg" media="(min-width: 768px)" fetchpriority="high">
-<link rel="preload" as="image" href="assets/video/hero-poster-mobile.jpg" media="(max-width: 767px)" fetchpriority="high">
-<link rel="stylesheet" href="assets/css/style.css?v=15">
+<link rel="preload" as="image" href="assets/video/hero-poster.jpg" media="(min-width: 1100px)" fetchpriority="high">
+<link rel="preload" as="image" href="assets/video/hero-poster-720.jpg" media="(max-width: 1099px)" fetchpriority="high">
+<link rel="stylesheet" href="assets/css/style.css?v=17">
 
 <script type="application/ld+json">
 {
@@ -189,8 +189,8 @@ window.METRIKA_ID = XXXXXXXX;
 <!-- HERO -->
 <section class="hero dark" aria-labelledby="hero-title">
  <div class="hero__media" aria-hidden="true">
-  <!-- Источник (mp4 H.264) подключает main.js после загрузки страницы и кроме reduced-motion и экономии трафика (тогда виден только poster); на телефоне — вертикальная версия -->
-  <video class="hero__video" autoplay muted loop playsinline preload="metadata" poster="assets/video/hero-poster.jpg" data-mp4="assets/video/hero-1080.mp4" data-mp4-mobile="assets/video/hero-mobile.mp4" data-poster-mobile="assets/video/hero-poster-mobile.jpg" tabindex="-1"></video>
+  <!-- Источник (mp4 H.264) подключает main.js после загрузки страницы и кроме reduced-motion и экономии трафика (тогда виден только poster); на телефоне и планшете — 720p -->
+  <video class="hero__video" autoplay muted loop playsinline preload="metadata" poster="assets/video/hero-poster.jpg" data-mp4="assets/video/hero-1080.mp4" data-mp4-mobile="assets/video/hero-720.mp4" data-poster-mobile="assets/video/hero-poster-720.jpg" tabindex="-1"></video>
  </div>
  <div class="hero__blur hero__blur--soft" aria-hidden="true"></div>
  <div class="hero__blur hero__blur--strong" aria-hidden="true"></div>
@@ -458,6 +458,6 @@ window.METRIKA_ID = XXXXXXXX;
  <button type="button" class="lightbox__nav lightbox__next" aria-label="Следующее фото">›</button>
 </dialog>
 
-<script src="assets/js/main.js?v=15" defer></script>
+<script src="assets/js/main.js?v=17" defer></script>
 </body>
 </html>
