@@ -186,18 +186,23 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
     linear-gradient(180deg, rgba(10, 26, 63, .3) 0%, transparent 16%, transparent 82%, rgba(10, 26, 63, .4) 100%),
     linear-gradient(90deg, rgba(10, 26, 63, .76) 0%, rgba(12, 28, 72, .74) 35%, rgba(22, 36, 102, .7) 52%, rgba(40, 38, 120, .35) 62%, rgba(40, 38, 120, 0) 74%); }
 }
-/* Телефон и планшет вертикально: видео — прямоугольник 16:9 сверху, текст ниже на тёмном фоне */
+/* Телефон и планшет вертикально: видео — часть фона. На всю ширину, заходит под шапку,
+   сверху и снизу растворяется в фоне; фон блока подобран под синеву бассейна. */
 @media (max-width: 1099px) and (orientation: portrait) {
-  .hero { display: block; min-height: 0; padding-top: calc(var(--header-h) + 12px); }
-  .hero__media { position: relative; inset: auto; z-index: 0; aspect-ratio: 16 / 9; width: auto; max-width: 720px;
-    margin: 0 max(var(--gutter), calc((100% - 720px) / 2)) clamp(24px, 6vw, 40px);
-    border-radius: 20px; overflow: hidden; background-image: url("../video/hero-poster-720.jpg"); background-position: 50% 50%;
-    box-shadow: 0 24px 50px -24px rgba(0, 0, 0, .8), 0 0 0 1px rgba(255, 251, 242, .14); }
-  .hero__video { object-position: 50% 50%; }
+  .hero { display: block; min-height: 0; padding-top: 0;
+    background: linear-gradient(180deg, #0c2a6e 0%, #0d2766 34%, #0f2459 62%, #161c55 100%); }
+  .hero__media { position: relative; inset: auto; z-index: 0; width: 100%; aspect-ratio: 1 / 1; max-height: 64svh;
+    background-image: url("../video/hero-poster-720.jpg"); background-position: 60% 50%; background-color: #0c2a6e;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 15%, #000 68%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0, #000 15%, #000 68%, transparent 100%); }
+  .hero__video { object-position: 60% 50%; filter: saturate(.88) brightness(.94); }
+  /* лёгкая тонировка в цвета сайта */
+  .hero__media::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(120% 90% at 70% 45%, rgba(12, 42, 110, 0) 40%, rgba(12, 42, 110, .55) 100%), rgba(27, 52, 140, .16); }
   .hero__blur, .hero__overlay { display: none; }
-  .hero__text { text-shadow: none; }
-  .hero__toggle { right: calc(max(var(--gutter), (100% - 720px) / 2) + 12px); bottom: auto;
-    top: calc(var(--header-h) + 12px + min(100vw - 2 * var(--gutter), 720px) * 9 / 16 - 52px); }
+  .hero .container { position: relative; z-index: 1; margin-top: -16vw; }
+  .hero .eyebrow { background: rgba(10, 26, 63, .82); }
+  .hero__toggle { right: var(--gutter); bottom: auto; top: calc(var(--header-h) + 10px); }
 }
 /* Телефон и планшет горизонтально: видео на весь экран, текст слева на затемнении */
 @media (max-width: 1099px) and (orientation: landscape) {
