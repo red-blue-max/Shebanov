@@ -269,9 +269,10 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .about__lower { grid-template-columns: 1fr 1fr; gap: 64px; }
 }
 
-.edu { counter-reset: edu; display: grid; gap: 2px; }
-.edu li { counter-increment: edu; display: grid; grid-template-columns: 52px 1fr; gap: 4px 16px; padding: 18px 0; border-bottom: 1px solid var(--line); }
-.edu li::before { content: counter(edu, decimal-leading-zero); grid-row: span 2; font: 700 20px/1.2 var(--font-head); color: var(--gold); }
+.edu { display: grid; gap: 2px; }
+.edu li { display: grid; grid-template-columns: 22px 1fr; gap: 4px 16px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+/* маркер — золотой ромб с точкой, как в списках hero и принципах методики */
+.edu li::before { content: ""; grid-row: span 2; width: 12px; height: 12px; margin: 6px 0 0 3px; transform: rotate(45deg); border: 2px solid var(--gold); background: radial-gradient(circle, var(--gold) 0 2px, transparent 2.5px); }
 .edu b { font-weight: 700; }
 .edu span { color: var(--ink-soft); font-size: 15px; }
 

@@ -29,22 +29,12 @@ window.COACH_DATA = {
   },
   {
    "title": "Курс подготовки олимпийских сборных России и Австралии",
-   "detail": "",
-   "todo": ""
-  },
-  {
-   "title": "Курс Masters Swimming Australia (MSA) Coach",
-   "detail": "2015",
+   "detail": "Masters Swimming Australia (MSA) Coach, 2015",
    "todo": ""
   },
   {
    "title": "Судья третьей категории",
    "detail": "Спортивное судейство соревнований по плаванию",
-   "todo": ""
-  },
-  {
-   "title": "Инструктор по спорту",
-   "detail": "Индивидуальное и групповое плавание, ОФП",
    "todo": ""
   }
  ],
