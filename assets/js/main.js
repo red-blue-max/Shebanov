@@ -74,8 +74,9 @@
 
     // Опыт
     $("#timeline").innerHTML = d.timeline.map(function (t) {
-      var period = t.period ? esc(t.period) : todo("УТОЧНИТЬ: " + (t.todo || "годы"));
-      return '<li><span class="period">' + period + "</span><b>" + esc(t.place) + '</b><span class="role">' + esc(t.role) + "</span></li>";
+      var period = t.period ? esc(t.period) : (t.todo ? todo("УТОЧНИТЬ: " + t.todo) : "");
+      return "<li>" + (period ? '<span class="period">' + period + "</span>" : "") + "<b>" + esc(t.place) + "</b>" +
+        (t.role ? '<span class="role">' + esc(t.role) + "</span>" : "") + "</li>";
     }).join("");
 
     // Достижения учеников
