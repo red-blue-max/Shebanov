@@ -438,6 +438,10 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .contacts__buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 30px 0 26px; }
 .contacts__buttons .btn { min-width: 200px; }
 .contacts__buttons .todo { display: block; font-size: 12px; margin-top: 4px; }
+.ico { width: 20px; height: 20px; flex: none; fill: currentColor; }
+.contacts__buttons .ico { margin-left: -2px; }
+.footer__links a { display: inline-flex; align-items: center; gap: 10px; }
+.footer__links .ico { width: 18px; height: 18px; fill: var(--gold-l); }
 .contacts__place { color: rgba(255, 251, 242, .78); font-size: 15px; margin: 0; }
 
 /* ---------- Подвал ---------- */

@@ -39,12 +39,23 @@
     return { tg: tg, wa: wa, tel: tel, primary: tg || wa || tel || "" };
   }
 
-  function contactButton(label, href, goal, todoLabel, cls) {
+  /* ---------- Иконки контактов (монохромные, цвет — currentColor) ---------- */
+  var ICONS = {
+    telegram: "M21.94 4.3 18.7 19.6c-.24 1.07-.88 1.34-1.78.83l-4.93-3.63-2.38 2.29c-.26.26-.48.48-.99.48l.35-5.02 9.14-8.26c.4-.35-.09-.55-.62-.2L6.2 13.2l-4.86-1.52c-1.06-.33-1.08-1.06.22-1.57L20.55 2.8c.88-.32 1.65.2 1.39 1.5z",
+    whatsapp: "M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 21.5h-.01a9.5 9.5 0 0 1-4.84-1.33l-.35-.21-3.6.94.96-3.5-.23-.36A9.46 9.46 0 0 1 2.5 12C2.5 6.75 6.78 2.5 12.05 2.5c2.55 0 4.95 1 6.75 2.8a9.45 9.45 0 0 1 2.79 6.72c0 5.25-4.28 9.48-9.54 9.48zm8.12-17.6A11.4 11.4 0 0 0 12.05.5C5.7.5.53 5.65.53 12c0 2.03.53 4.01 1.54 5.76L.43 23.5l5.88-1.54A11.5 11.5 0 0 0 12.05 23.5c6.34 0 11.52-5.16 11.52-11.5 0-3.07-1.2-5.96-3.4-8.1z",
+    phone: "M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.61 21 3 13.39 3 4c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z",
+    mail: "M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5z"
+  };
+  function icon(name) {
+    return '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="' + ICONS[name] + '"/></svg>';
+  }
+
+  function contactButton(label, href, goal, todoLabel, cls, ico) {
     if (!href) {
-      return '<a class="btn ' + cls + '" aria-disabled="true" role="link">' + esc(label) + todo(todoLabel) + "</a>";
+      return '<a class="btn ' + cls + '" aria-disabled="true" role="link">' + (ico ? icon(ico) : "") + esc(label) + todo(todoLabel) + "</a>";
     }
     var ext = /^https?:/.test(href) ? ' target="_blank" rel="noopener"' : "";
-    return '<a class="btn ' + cls + '" href="' + esc(href) + '"' + ext + ' data-goal="' + goal + '">' + esc(label) + "</a>";
+    return '<a class="btn ' + cls + '" href="' + esc(href) + '"' + ext + ' data-goal="' + goal + '">' + (ico ? icon(ico) : "") + esc(label) + "</a>";
   }
 
   /* ---------- Рендер ---------- */
@@ -125,17 +136,16 @@
     var c = d.contacts;
     var L = contactLinks(c);
     $("#contact-buttons").innerHTML =
-      contactButton("Telegram", L.tg, "messenger_telegram", "УТОЧНИТЬ: Telegram", "btn--gold") +
-      contactButton("WhatsApp", L.wa, "messenger_whatsapp", "УТОЧНИТЬ: WhatsApp", "btn--ghost") +
-      contactButton(c.phone ? "Позвонить: " + c.phone : "Позвонить", L.tel, "phone_click", "УТОЧНИТЬ: телефон", "btn--ghost");
+      contactButton("Telegram", L.tg, "messenger_telegram", "УТОЧНИТЬ: Telegram", "btn--gold", "telegram") +
+      contactButton("WhatsApp", L.wa, "messenger_whatsapp", "УТОЧНИТЬ: WhatsApp", "btn--ghost", "whatsapp") +
+      contactButton(c.phone ? "Позвонить: " + c.phone : "Позвонить", L.tel, "phone_click", "УТОЧНИТЬ: телефон", "btn--ghost", "phone");
 
     var fc = [];
-    fc.push("<li>" + (c.phone ? '<a href="' + L.tel + '" data-goal="phone_click">' + esc(c.phone) + "</a>" : "Телефон: " + todo("УТОЧНИТЬ")) + "</li>");
-    fc.push("<li>" + (L.tg ? '<a href="' + L.tg + '" target="_blank" rel="noopener" data-goal="messenger_telegram">Telegram</a>' : "Telegram: " + todo("УТОЧНИТЬ")) + "</li>");
-    fc.push("<li>" + (L.wa ? '<a href="' + L.wa + '" target="_blank" rel="noopener" data-goal="messenger_whatsapp">WhatsApp</a>' : "WhatsApp: " + todo("УТОЧНИТЬ")) + "</li>");
-    if (c.email) fc.push('<li><a href="mailto:' + esc(c.email) + '">' + esc(c.email) + "</a></li>");
+    if (c.phone) fc.push('<li><a href="' + L.tel + '" data-goal="phone_click">' + icon("phone") + esc(c.phone) + "</a></li>");
+    if (L.tg) fc.push('<li><a href="' + L.tg + '" target="_blank" rel="noopener" data-goal="messenger_telegram">' + icon("telegram") + "Telegram</a></li>");
+    if (L.wa) fc.push('<li><a href="' + L.wa + '" target="_blank" rel="noopener" data-goal="messenger_whatsapp">' + icon("whatsapp") + "WhatsApp</a></li>");
+    if (c.email) fc.push('<li><a href="mailto:' + esc(c.email) + '">' + icon("mail") + esc(c.email) + "</a></li>");
     $("#footer-contacts").innerHTML = fc.join("");
-    $("#requisites").innerHTML = d.legal.requisites ? esc(d.legal.requisites) : "Реквизиты: " + todo("УТОЧНИТЬ");
 
     // Все кнопки «Записаться»: сразу в мессенджер, если контакты есть
     if (L.primary) {
