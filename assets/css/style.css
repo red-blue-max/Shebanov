@@ -405,13 +405,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .lightbox__next { right: 12px; }
 .lightbox__close:hover, .lightbox__nav:hover { background: var(--gold); color: var(--navy); }
 
-/* ---------- Отзывы ---------- */
-.reviews { background: var(--white); }
-.reviews__list { display: grid; gap: 16px; margin-top: 32px; }
-.review { padding: 26px; border-radius: var(--radius); background: var(--cream); }
-.review blockquote { margin: 0 0 14px; font: italic 500 21px/1.4 var(--font-quote); color: var(--navy); }
-@media (min-width: 900px) { .reviews__list { grid-template-columns: repeat(3, 1fr); } }
-
 /* ---------- FAQ ---------- */
 .faq { background: var(--white); }
 .faq h2 { color: var(--navy); }
@@ -471,9 +464,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* ---------- Появление при прокрутке ---------- */
 .js .reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
 .js .reveal.is-in { opacity: 1; transform: none; }
-
-/* ---------- Режим разработчика (?dev) ---------- */
-.dev-note { background: var(--todo-bg); color: #1d1600; padding: 18px 22px; border-radius: 14px; font-weight: 600; }
 
 /* ---------- Без анимаций ---------- */
 @media (prefers-reduced-motion: reduce) {

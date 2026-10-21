@@ -79,11 +79,15 @@ def main():
     html = re.sub(r"(assets/video/[\w.-]+\.(?:mp4|webp|jpg))(?:\?v=[0-9a-f]+)?", version_asset, html)
     index.write_text(html, encoding="utf-8")
 
-    privacy = SITE / "privacy.html"
-    p = privacy.read_text(encoding="utf-8")
-    p = re.sub(r'<link rel="stylesheet" href="assets/css/site\.min\.css[^"]*">',
-               f'<link rel="stylesheet" href="assets/css/site.min.css?v={short_hash(css_min)}">', p)
-    privacy.write_text(p, encoding="utf-8")
+    # privacy.html и 404.html подключают общий site.min.css — с версией по хэшу
+    for name in ("privacy.html", "404.html"):
+        page = SITE / name
+        if not page.exists():
+            continue
+        p = page.read_text(encoding="utf-8")
+        p = re.sub(r'<link rel="stylesheet" href="(/?)assets/css/site\.min\.css[^"]*">',
+                   lambda m: f'<link rel="stylesheet" href="{m.group(1)}assets/css/site.min.css?v={short_hash(css_min)}">', p)
+        page.write_text(p, encoding="utf-8")
 
     print(f"CSS {len(css_src) // 1024} КБ -> {len(css_min) // 1024} КБ (встроен в index.html)")
     print(f"JS  {len((SITE / 'assets/js/main.js').read_text(encoding='utf-8')) // 1024} КБ -> {len(js_min) // 1024} КБ")

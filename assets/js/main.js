@@ -6,7 +6,6 @@
 
   var root = document.documentElement;
   root.classList.add("js");
-  var DEV = /[?&]dev\b/.test(location.search);
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------- Утилиты ---------- */
@@ -119,16 +118,12 @@
         '<div class="acc__panel" id="faq-' + i + '" role="region" aria-labelledby="faq-btn-' + i + '"><div><p>' + a + "</p></div></div></div>";
     }).join("");
 
-    // Отзывы: только реальные. Пусто — блок скрыт (в ?dev — виден TODO)
+    // Отзывы: блок в разметке пока не нужен (отзывов нет). Если появится <section id="reviews">, заполнится из coach.json
     var rev = $("#reviews");
-    if (d.reviews && d.reviews.length) {
+    if (rev && d.reviews && d.reviews.length) {
       $("#reviews-list").innerHTML = d.reviews.map(function (r) {
         return '<figure class="review"><blockquote>' + esc(r.text) + "</blockquote><figcaption>" + esc(r.author || "") + "</figcaption></figure>";
       }).join("");
-      rev.hidden = false;
-      $("[data-reviews-link]").hidden = false;
-    } else if (DEV) {
-      $("#reviews-list").innerHTML = '<p class="dev-note">TODO: собрать 3–5 реальных отзывов с согласием авторов и добавить в coach.json → reviews. Без отзывов блок скрыт.</p>';
       rev.hidden = false;
     }
 
