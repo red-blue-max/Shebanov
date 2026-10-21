@@ -97,6 +97,7 @@
     }).join("");
     $("#schedule-notes").innerHTML = (d.schedule.notes || []).map(function (n) { return "<p>" + esc(n) + "</p>"; }).join("");
     if (d.location.mapUrl) $("#map-link").href = d.location.mapUrl;
+    if (d.location.routeUrl && $("#route-link")) $("#route-link").href = d.location.routeUrl;
 
     // FAQ
     $("#faq-list").innerHTML = d.faq.map(function (f, i) {

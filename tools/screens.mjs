@@ -50,7 +50,7 @@ for (const w of WIDTHS) {
   await send("Page.navigate", { url: URL_ });
   await sleep(1500);
   // прокрутка вниз и обратно, чтобы подгрузились lazy-картинки; фиксированные элементы скрываем
-  await evaluate(`(async () => { for (let y = 0; y < document.documentElement.scrollHeight; y += 600) { scrollTo(0, y); await new Promise(r => setTimeout(r, 60)); } scrollTo(0, 0); await new Promise(r => setTimeout(r, 1200)); document.querySelector('.sticky-cta').style.display = 'none'; })()`);
+  await evaluate(`(async () => { for (let y = 0; y < document.documentElement.scrollHeight; y += 600) { scrollTo(0, y); await new Promise(r => setTimeout(r, 60)); } scrollTo(0, 0); await new Promise(r => setTimeout(r, 1200)); document.querySelector('.sticky-cta').style.display = 'none'; const st = document.createElement('style'); st.textContent = '*{content-visibility:visible!important}'; document.head.appendChild(st); await new Promise(r => setTimeout(r, 1500)); })()`);
   const info = await evaluate(`(() => {
     const vw = document.documentElement.clientWidth;
     const over = [...document.querySelectorAll('body *')].filter(e => {
