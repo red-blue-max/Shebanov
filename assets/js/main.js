@@ -20,22 +20,13 @@
     if (typeof window.ym === "function" && window.METRIKA_ID) window.ym(window.METRIKA_ID, "reachGoal", goal);
   }
 
-  /* ---------- Загрузка данных (fetch, а для file:// — data.js) ---------- */
+  /* ---------- Загрузка данных: встроены в страницу сборкой; запасной вариант — data/coach.json ---------- */
   function loadData() {
-    if (window.COACH_DATA) return Promise.resolve(window.COACH_DATA);
-    var viaScript = function () {
-      return new Promise(function (resolve, reject) {
-        var s = document.createElement("script");
-        s.src = "assets/js/data.js";
-        s.onload = function () { window.COACH_DATA ? resolve(window.COACH_DATA) : reject(new Error("data.js пуст")); };
-        s.onerror = reject;
-        document.head.appendChild(s);
-      });
-    };
-    if (location.protocol === "file:") return viaScript();
-    return fetch("data/coach.json", { cache: "no-cache" })
-      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-      .catch(viaScript);
+    var inline = document.getElementById("coach-data");
+    if (inline) {
+      try { return Promise.resolve(JSON.parse(inline.textContent)); } catch (e) { /* ниже — запасной путь */ }
+    }
+    return fetch("data/coach.json").then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); });
   }
 
   /* ---------- Ссылки на мессенджеры ---------- */
@@ -380,9 +371,10 @@
     var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     var saveData = !!(conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || "")));
     // Телефон и планшет (короткая сторона экрана < 1100 px) — лёгкая 720p-версия, подходит для обеих ориентаций
-    var phone = window.matchMedia("(max-width: 1099px)").matches || Math.min(screen.width, screen.height) < 768;
+    var phone = window.matchMedia("(max-width: 1099px)").matches;
     var suffix = phone ? "-mobile" : "";
-    if (phone && video.getAttribute("data-poster-mobile")) video.poster = video.getAttribute("data-poster-mobile");
+    var poster = video.getAttribute(phone ? "data-poster-mobile" : "data-poster");
+    if (poster) video.poster = poster;
     if (reduceMotion || saveData) return;
 
     var userPaused = false;
@@ -423,7 +415,10 @@
       }).observe($(".hero"));
     }
 
-    var later = window.requestIdleCallback || function (cb) { setTimeout(cb, 200); };
+    // В простое после загрузки, но не позже чем через 1,5 с (rIC может долго не срабатывать)
+    var later = function (cb) {
+      if (window.requestIdleCallback) window.requestIdleCallback(cb, { timeout: 1500 }); else setTimeout(cb, 200);
+    };
     if (document.readyState === "complete") later(start);
     else window.addEventListener("load", function () { later(start); }, { once: true });
   }

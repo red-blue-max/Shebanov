@@ -2,7 +2,7 @@
 
 Запуск из папки site/:  python tools/make_hero_video.py
 Нужен ffmpeg с zscale/tonemap (берётся из пакета imageio-ffmpeg).
-Результат: assets/video/hero-1080.mp4, hero-720.mp4, hero-poster.jpg, hero-poster-720.jpg.
+Результат: assets/video/hero-1080.mp4, hero-720.mp4, hero-poster.webp, hero-poster-720.webp.
 Промежуточные файлы — в ../video_hero/build/ (оригиналы не трогаются).
 """
 import subprocess
@@ -89,9 +89,10 @@ def main():
              "-movflags", "+faststart", str(OUT / name)])
         print(name, (OUT / name).stat().st_size // 1024, "KB")
 
-    # Постеры — первый кадр
-    run(["-i", str(OUT / "hero-1080.mp4"), "-frames:v", "1", "-q:v", "3", str(OUT / "hero-poster.jpg")])
-    run(["-i", str(OUT / "hero-720.mp4"), "-frames:v", "1", "-q:v", "4", str(OUT / "hero-poster-720.jpg")])
+    # Постеры — первый кадр, WebP (легче JPG в 2–2,5 раза)
+    run(["-i", str(OUT / "hero-1080.mp4"), "-frames:v", "1", "-c:v", "libwebp", "-quality", "70", str(OUT / "hero-poster.webp")])
+    run(["-i", str(OUT / "hero-720.mp4"), "-frames:v", "1", "-c:v", "libwebp", "-quality", "70", str(OUT / "hero-poster-720.webp")])
+    print("Готово. Запустите python tools/build.py, чтобы обновить версии файлов в index.html")
 
 
 if __name__ == "__main__":

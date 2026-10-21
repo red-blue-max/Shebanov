@@ -166,7 +166,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .hero__text { max-width: 720px; text-shadow: 0 2px 18px rgba(6, 14, 36, .45); }
 
 /* Видео-фон: сначала poster, источники подключает main.js */
-.hero__media { position: absolute; inset: 0; z-index: -4; background: var(--navy) url("../video/hero-poster.jpg") 60% 50% / cover no-repeat; }
+.hero__media { position: absolute; inset: 0; z-index: -4; background: var(--navy) url("../video/hero-poster.webp") 60% 50% / cover no-repeat; }
 .hero__video { width: 100%; height: 100%; object-fit: cover; object-position: 60% 50%; display: block; }
 /* Десктоп: слева под текстом — размытие и затемнение, справа видео чистое.
    Два слоя размытия с плавными масками дают постепенный переход. */
@@ -192,7 +192,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .hero { display: block; min-height: 0; padding-top: 0;
     background: linear-gradient(180deg, #0c2a6e 0%, #0d2766 34%, #0f2459 62%, #161c55 100%); }
   .hero__media { position: relative; inset: auto; z-index: 0; width: 100%; aspect-ratio: 1 / 1; max-height: 64svh;
-    background-image: url("../video/hero-poster-720.jpg"); background-position: 60% 50%; background-color: #0c2a6e;
+    background-image: url("../video/hero-poster-720.webp"); background-position: 60% 50%; background-color: #0c2a6e;
     -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 15%, #000 68%, transparent 100%);
     mask-image: linear-gradient(180deg, transparent 0, #000 15%, #000 68%, transparent 100%); }
   .hero__video { object-position: 60% 50%; filter: saturate(.88) brightness(.94); }
@@ -208,7 +208,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 @media (max-width: 1099px) and (orientation: landscape) {
   /* видео — высотой в экран, ниже текст продолжается на тёмном фоне */
   .hero__media, .hero__blur, .hero__overlay { bottom: auto; height: 100svh; }
-  .hero__media { background-image: url("../video/hero-poster-720.jpg"); }
+  .hero__media { background-image: url("../video/hero-poster-720.webp"); }
   .hero__text { max-width: 58%; }
   .hero__blur--soft { -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 60%, transparent 82%); mask-image: linear-gradient(90deg, #000 0%, #000 60%, transparent 82%); }
   .hero__blur--strong { -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 50%, transparent 72%); mask-image: linear-gradient(90deg, #000 0%, #000 50%, transparent 72%); }
@@ -233,7 +233,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .trust li { display: flex; align-items: center; gap: 8px; }
 .trust li::before { content: ""; width: 8px; height: 8px; transform: rotate(45deg); background: var(--gold); flex: none; }
 
-.frame { position: relative; margin: 0; }
 
 
 
@@ -283,7 +282,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .timeline .period { font: 600 13px/1 var(--font-body); letter-spacing: .12em; text-transform: uppercase; color: var(--royal); display: block; margin-bottom: 6px; }
 .timeline b { display: block; }
 .timeline span.role { color: var(--ink-soft); font-size: 15px; }
-.profile-link a { font-weight: 700; }
 /* Три фото под «Опытом работы»: бенто-сетка — высокий кадр слева и два справа,
    скругления, тонкая золотая рамка со сдвигом (как у портрета), подписи-«стекло» */
 .exp-photos { position: relative; isolation: isolate; display: grid; grid-template-columns: 1.05fr 1fr; grid-template-rows: 1fr 1fr;
@@ -302,35 +300,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   transform: translateX(-50%) rotate(45deg); border-radius: 2px; border: 2px solid var(--gold-l);
   background: radial-gradient(circle at 35% 35%, #ff5a6e, #c8102e 55%, #7d0618); box-shadow: 0 2px 6px rgba(10, 26, 63, .5); }
 
-
-/* ---------- Результаты: табло ---------- */
-.results { padding-top: calc(var(--section) + 30px); padding-bottom: calc(var(--section) + 40px); overflow: hidden; }
-.board { margin-top: 44px; border-top: 1px solid rgba(230, 198, 92, .35); counter-reset: lane; }
-.board li { counter-increment: lane; display: grid; grid-template-columns: 56px 1fr; gap: 6px 18px; padding: 22px 0; border-bottom: 1px solid rgba(230, 198, 92, .35); align-items: start; }
-.board li::before { content: counter(lane); grid-row: span 3; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 12px; border: 1.5px solid var(--gold); font: 700 20px/1 var(--font-head); color: var(--gold-l); }
-.board h3 { font-size: clamp(18px, 2.2vw, 26px); margin: 4px 0 2px; color: var(--gold-l); }
-.board p { margin: 0; color: rgba(255, 251, 242, .86); }
-.board .todo { display: inline-block; margin-top: 8px; }
-.board a { color: var(--gold-l); font-weight: 600; }
-@media (min-width: 900px) {
-  .board li { grid-template-columns: 72px minmax(220px, .9fr) 1.3fr; align-items: center; }
-  .board li::before { grid-row: auto; }
-  .board h3 { margin: 0; }
-  .board .board__desc { grid-column: 3; }
-}
-
-.strip { margin-top: 56px; }
-.strip__track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px var(--gutter) 18px; scrollbar-width: thin; scrollbar-color: var(--gold) transparent; }
-.strip__track li { flex: 0 0 min(70vw, 300px); scroll-snap-align: center; }
-.strip__track figure { margin: 0; border-radius: 16px; overflow: hidden; border: 2px solid rgba(230, 198, 92, .55); }
-.strip__track img { aspect-ratio: 3 / 4; object-fit: cover; width: 100%; transition: transform .6s var(--ease); }
-.strip__track li:hover img { transform: scale(1.04); }
-.strip__caption { font-size: 14px; color: rgba(255, 251, 242, .75); margin-top: 6px; }
-@media (min-width: 1240px) {
-  .strip__track { justify-content: center; overflow: visible; }
-  .strip__track li { flex: 0 0 216px; }
-  .strip__track li:nth-child(even) { transform: translateY(28px); }
-}
 
 /* ---------- Методика: шаги-дорожки ---------- */
 .method { background: var(--cream); padding-bottom: clamp(16px, 3vw, 32px); }
@@ -485,6 +454,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .sticky-cta { position: fixed; left: 16px; right: 16px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 40; box-shadow: 0 14px 36px -10px rgba(10, 26, 63, .7), 0 0 0 4px rgba(10, 26, 63, .9); transform: translateY(140%); transition: transform .35s var(--ease); }
 .sticky-cta.is-visible { transform: none; }
 @media (min-width: 1081px) { .sticky-cta { display: none; } }
+
+/* ---------- Скорость: блоки ниже первого экрана рисуются, только когда до них доходит прокрутка ---------- */
+.method, .programs, .schedule, .gallery, .faq, .contacts, .footer { content-visibility: auto; contain-intrinsic-size: auto 900px; }
 
 /* ---------- Появление при прокрутке ---------- */
 .js .reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s var(--ease), transform .8s var(--ease); }

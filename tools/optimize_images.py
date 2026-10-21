@@ -17,7 +17,6 @@ WIDTHS = [480, 800, 1200, 1600]
 # key: (исходник, кроп (l, t, r, b) или None, зоны размытия [(l, t, r, b)])
 IMAGES = {
     "hero-coach": (SITE / "assets" / "img" / "src" / "hero-coach-v2.jpg", None, []),
-    "coach-team": (EDITED / "Generated Image October 17, 2026 - 3_19AM.jpg", None, []),
     # портреты на стене размыты, кадр обрезан выше обуви
     "coach-award": (
         EDITED / "Generated Image October 17, 2026 - 3_41AM.jpg",
@@ -25,10 +24,7 @@ IMAGES = {
         [(290, 160, 398, 320), (660, 168, 798, 342)],
     ),
     "result-1": (EDITED / "Generated Image October 17, 2026 - 2_43AM.jpg", None, []),
-    "result-2": (EDITED / "Generated Image October 16, 2026 - 6_10PM.jpg", None, []),
     "result-3": (EDITED / "Generated Image October 17, 2026 - 3_08AM.jpg", None, []),
-    "result-4": (SRC / "photo_5368336124025182929_y.jpg", None, []),
-    "result-5": (SRC / "photo_5368336124025182931_y.jpg", None, []),
     "gallery-team": (EDITED / "Generated Image October 16, 2026 - 6_08PM.jpg", None, []),
     "gallery-girls": (EDITED / "Generated Image October 16, 2026 - 6_03PM.jpg", None, []),
     "gallery-group": (SRC / "photo_5368336124025182910_w.jpg", None, []),
