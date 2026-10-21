@@ -363,7 +363,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .place__name { font: 500 18px/1.35 var(--font-head); margin-bottom: 6px; }
 .place__addr { color: rgba(255, 251, 242, .82); margin-bottom: 10px; }
 /* Интерактивная карта бассейна (виджет Яндекса) и кнопка маршрута под ней */
-.map { position: relative; margin-top: 16px; aspect-ratio: 13 / 9; min-height: 260px; border-radius: 16px; overflow: hidden;
+.map { position: relative; width: 100%; margin-top: 16px; aspect-ratio: 13 / 9; min-height: min(260px, 70vw); border-radius: 16px; overflow: hidden;
   border: 1px solid rgba(230, 198, 92, .35); background: #e9e6dd center / cover no-repeat; box-shadow: 0 24px 50px -30px rgba(0, 0, 0, .8); }
 .map iframe { position: absolute; inset: 0; display: block; width: 100%; height: 100%; border: 0; }
 .map__route { margin-top: 14px; gap: 8px; }
