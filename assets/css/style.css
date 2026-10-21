@@ -284,7 +284,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .timeline span.role { color: var(--ink-soft); font-size: 15px; }
 /* Три фото под «Опытом работы»: бенто-сетка — высокий кадр слева и два справа,
    скругления, тонкая золотая рамка со сдвигом (как у портрета), подписи-«стекло» */
-.exp-photos { position: relative; isolation: isolate; display: grid; grid-template-columns: 1.05fr 1fr; grid-template-rows: 1fr 1fr;
+.exp-photos { position: relative; isolation: isolate; display: grid; grid-template-columns: .85fr 1.25fr; grid-template-rows: 1fr 1fr;
   gap: 12px; margin-top: 28px; height: clamp(300px, 34vw, 400px); }
 .exp-photos::before { content: ""; position: absolute; inset: 18px -14px -14px 18px; border: 1.5px solid rgba(201, 162, 39, .6); border-radius: 26px; z-index: -1; }
 /* Рамка в стиле логотипа: металлическое золото, внутренняя королевская синяя линия, «камень» сверху */
