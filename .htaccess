@@ -1,34 +1,35 @@
-# Настройки для хостинга Timeweb (Apache). Лежит в корне сайта рядом с index.html.
+# Timeweb (Apache behind nginx). Put next to index.html in public_html.
 
 AddDefaultCharset UTF-8
 DirectoryIndex index.html
 ErrorDocument 404 /404.html
 Options -Indexes
 
-# HTTPS и адрес без www: http://, www. -> https://shebanov-swim.ru
+# Redirect http:// and www. to https://shebanov-swim.ru
+# nginx terminates SSL in front of Apache, so %{HTTPS} is always off here:
+# check X-Forwarded-Proto instead, otherwise the redirect loops forever.
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteCond %{HTTPS} off [OR]
   RewriteCond %{HTTP_HOST} ^www\. [NC]
+  RewriteRule ^ https://shebanov-swim.ru%{REQUEST_URI} [L,R=301]
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
   RewriteRule ^ https://shebanov-swim.ru%{REQUEST_URI} [L,R=301]
   # /index.html -> /
   RewriteCond %{THE_REQUEST} \s/index\.html[\s?] [NC]
   RewriteRule ^index\.html$ / [L,R=301]
 </IfModule>
 
-# Типы файлов
+# MIME types
 AddType image/webp .webp
 AddType font/woff2 .woff2
 AddType video/mp4 .mp4
-AddType application/manifest+json .webmanifest
 
-# Сжатие текстовых файлов
+# Compression
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json image/svg+xml
 </IfModule>
 
-# Кэш: шрифты, CSS, JS, видео — на год (в ссылках есть версия ?v=, при обновлении она меняется),
-# картинки — на 30 дней, HTML — всегда свежий.
+# Cache: fonts, CSS, JS, video for 1 year (URLs carry ?v=hash), images 30 days, HTML always fresh
 <IfModule mod_headers.c>
   <FilesMatch "\.(woff2|css|js|mp4)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
