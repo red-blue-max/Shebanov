@@ -33,6 +33,11 @@ window.COACH_DATA = {
    "todo": ""
   },
   {
+   "title": "Курс Masters Swimming Australia (MSA) Coach",
+   "detail": "2015",
+   "todo": ""
+  },
+  {
    "title": "Судья третьей категории",
    "detail": "Спортивное судейство соревнований по плаванию",
    "todo": ""
