@@ -79,13 +79,12 @@
         (t.role ? '<span class="role">' + esc(t.role) + "</span>" : "") + "</li>";
     }).join("");
 
-    // Достижения учеников
-    $("#achievements").innerHTML = d.achievements.map(function (a) {
-      var more = a.anchor ? ' <a href="' + esc(a.anchor) + '">Подробнее</a>' : "";
-      var t = a.todo ? "<br>" + todo("ПОДТВЕРДИТЬ: " + a.todo) : "";
-      return '<li class="reveal"><h3>' + esc(a.title) + '</h3><p class="board__desc">' + esc(a.text) + more + t + "</p></li>";
-    }).join("");
-    if (d.competitionsCaption) { $(".strip__caption").textContent = d.competitionsCaption; $(".strip__caption").hidden = false; }
+    // Достижения учеников (блок может отсутствовать в разметке)
+    if ($("#achievements")) {
+      $("#achievements").innerHTML = d.achievements.map(function (a) {
+        return '<li class="reveal"><h3>' + esc(a.title) + '</h3><p class="board__desc">' + esc(a.text) + "</p></li>";
+      }).join("");
+    }
 
     // Методика
     $("#method-steps").innerHTML = d.method.steps.map(function (s) {
