@@ -29,10 +29,11 @@ IMAGES = {
     "gallery-girls": (EDITED / "Generated Image October 16, 2026 - 6_03PM.jpg", None, []),
     "gallery-group": (SRC / "photo_5368336124025182910_w.jpg", None, []),
     "gallery-medal": (SRC / "photo_5368336124025182933_y.jpg", None, []),
-    # три фото под «Опытом работы» (21.10.2026); у открытой воды обрезана плашка мероприятия внизу
+    # три фото под «Опытом работы»
     "exp-team": (EDITED / "exp-1-team.jpg", None, []),
     "exp-podium": (EDITED / "exp-2-podium.jpg", None, []),
-    "exp-openwater": (EDITED / "exp-3-openwater.jpg", (0, 0, 1717, 2022), []),
+    # ученица с медалью после заплыва на открытой воде (23.10.2026)
+    "exp-openwater": (EDITED / "exp-3-student-openwater.jpg", None, []),
 }
 
 
