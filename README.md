@@ -60,6 +60,7 @@ _screens/             скриншоты на 360/390/768/1024/1440
 - `python tools/package.py` — собирает сайт и кладёт чистую копию в `../deploy/shebanov-swim.ru/` и архив `../deploy/shebanov-swim-site.zip` (только нужные файлы: страницы, `.htaccess`, `robots.txt`, `sitemap.xml`, сжатые CSS/JS, шрифты, картинки и видео, на которые есть ссылки). Скрипт сам проверяет, что нет битых ссылок.
 - Архив распаковывается в корень сайта на хостинге (папка `public_html`). Пошаговая инструкция — `../deploy/ИНСТРУКЦИЯ_TIMEWEB.md`.
 - `.htaccess`: HTTPS, адрес без www, сжатие, кэш (как в `vercel.json`), своя страница `404.html`.
+- **Автодеплой:** `.github/workflows/deploy-timeweb.yml` — при каждом push в `main` GitHub Actions выполняет `python tools/package.py` и выгружает изменившиеся файлы по FTP (SamKirkland/FTP-Deploy-Action) в папку сайта на Timeweb. Нужны секреты репозитория `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`, `FTP_SERVER_DIR` (и при необходимости `FTP_PROTOCOL=ftp`). Без секретов выгрузка пропускается, сборка всё равно проверяется. Ручной запуск: вкладка Actions → «Деплой на Timeweb» → Run workflow.
 
 ## Карта в расписании
 - Интерактивный виджет Яндекс Карт (`yandex.ru/map-widget/v1`, iframe, `loading="lazy"`): масштаб, перемещение, пробки, «моё местоположение» — прямо на сайте. Пока виджет грузится, под ним видна статичная картинка карты.
