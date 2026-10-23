@@ -16,8 +16,13 @@ Options -Indexes
   RewriteRule ^ https://shebanov-swim.ru%{REQUEST_URI} [L,R=301]
   # /index.html -> /
   RewriteCond %{THE_REQUEST} \s/index\.html[\s?] [NC]
-  RewriteRule ^index\.html$ / [L,R=301]
+  RewriteRule ^index\.html$ https://shebanov-swim.ru/ [L,R=301]
 </IfModule>
+
+# Hide the deploy state file of the GitHub auto-deploy
+<Files ".ftp-deploy-sync-state.json">
+  Require all denied
+</Files>
 
 # MIME types
 AddType image/webp .webp
