@@ -266,19 +266,29 @@
     var header = $(".header");
     var sticky = $(".sticky-cta");
     var hero = $(".hero");
+    var heroWave = $(".hero > .wave");
+    var heroMedia = $(".hero__media");
     var ticking = false;
 
     function onScroll() {
       var y = window.scrollY;
       var max = document.documentElement.scrollHeight - window.innerHeight;
-      header.classList.toggle("is-scrolled", y > 40);
+      // Шапка прозрачная, пока под ней видео; синий фон — когда под ней уже текст или следующий блок.
+      // На компьютере видео — фон всего первого экрана (граница — волна внизу),
+      // на телефоне вертикально видео — отдельный блок сверху (граница — начало текста под ним).
+      var videoIsBlock = heroMedia && getComputedStyle(heroMedia).position === "relative";
+      var heroEdge = videoIsBlock ? $(".hero__text").getBoundingClientRect().top - 10
+        : (heroWave ? heroWave.getBoundingClientRect().top : hero.getBoundingClientRect().bottom);
+      header.classList.toggle("is-scrolled", heroEdge <= header.offsetHeight);
       header.style.setProperty("--p", max > 0 ? Math.min(1, y / max).toFixed(4) : 0);
       var heroBottom = hero.offsetTop + hero.offsetHeight - 120;
       var contacts = $("#contacts").getBoundingClientRect().top < window.innerHeight * 0.6;
       sticky.classList.toggle("is-visible", y > heroBottom && !contacts);
       ticking = false;
     }
-    window.addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+    var schedule = function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } };
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
     onScroll();
 
     var burger = $(".burger");
