@@ -41,6 +41,17 @@ jobs:
       - name: Сборка и упаковка сайта
         run: python tools/package.py
 
+      - name: Папка на сервере (косая черта в конце обязательна)
+        if: env.FTP_SERVER != ''
+        id: dir
+        env:
+          RAW_DIR: ${{ secrets.FTP_SERVER_DIR }}
+        run: |
+          d="$(echo "$RAW_DIR" | xargs)"   # убрать пробелы по краям
+          d="${d#/}"; d="${d%/}/"            # без / в начале, с / в конце
+          echo "server_dir=$d" >> "$GITHUB_OUTPUT"
+          echo "Выгрузка в папку: $d"
+
       - name: Выгрузка на Timeweb по FTP
         if: env.FTP_SERVER != ''
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -50,8 +61,8 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ${{ secrets.FTP_PROTOCOL || 'ftps' }}
           local-dir: ${{ github.workspace }}/_deploy/shebanov-swim.ru/
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
-          log-level: standard
+          server-dir: ${{ steps.dir.outputs.server_dir }}
+          log-level: verbose
 
       - name: Секреты FTP не заданы
         if: env.FTP_SERVER == ''
