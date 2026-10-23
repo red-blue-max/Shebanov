@@ -14,6 +14,7 @@
 """
 import hashlib
 import json
+import os
 import re
 import subprocess
 from pathlib import Path
@@ -24,7 +25,7 @@ ESBUILD = ["npx", "--yes", "esbuild@0.24.0"]
 
 def esbuild(src: str, loader: str) -> str:
     res = subprocess.run([*ESBUILD, f"--loader={loader}", "--minify", "--charset=utf8", "--log-level=warning"],
-                         input=src.encode("utf-8"), capture_output=True, check=True, shell=True)
+                         input=src.encode("utf-8"), capture_output=True, check=True, shell=(os.name == "nt"))  # на Windows npx — это .cmd
     return res.stdout.decode("utf-8").strip()
 
 

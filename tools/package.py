@@ -7,6 +7,7 @@
    картинки и видео, на которые есть ссылки. Исходники, инструменты, заметки, скриншоты — не попадают.
 3. Упаковывает это в ../deploy/shebanov-swim-site.zip — его и загружать на хостинг.
 """
+import os
 import re
 import runpy
 import shutil
@@ -14,7 +15,8 @@ import zipfile
 from pathlib import Path
 
 SITE = Path(__file__).resolve().parent.parent
-DEPLOY = SITE.parent / "deploy"
+# DEPLOY_DIR можно задать переменной окружения (так делает автодеплой на GitHub)
+DEPLOY = Path(os.environ.get("DEPLOY_DIR") or SITE.parent / "deploy")
 OUT = DEPLOY / "shebanov-swim.ru"
 ZIP = DEPLOY / "shebanov-swim-site.zip"
 
